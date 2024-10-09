@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:bkash_payment_flutter/features/checkout/api/api_key.dart';
 import 'package:bkash_payment_flutter/models/grant_token_response.dart';
 import 'package:bkash_payment_flutter/route/route_name.dart';
 import 'package:flutter/material.dart';
@@ -30,16 +31,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "username": "sandboxTokenizedUser02",
-        "password": "sandboxTokenizedUser02@12345"
+        "username": ApiKey.username,
+        "password": ApiKey.password,
       },
       body: Uint8List.fromList(
         utf8.encode(
           jsonEncode(
             {
-              "app_key": "4f6o0cjiki2rfm34kfdadl1eqq",
+              "app_key": ApiKey.app_key,
               "app_secret":
-                  "2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b",
+                  ApiKey.app_secret,
             },
           ),
         ),
