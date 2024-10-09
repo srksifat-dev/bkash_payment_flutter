@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:bkash_payment_flutter/features/checkout/api/api_key.dart';
 import 'package:bkash_payment_flutter/models/grant_token_response.dart';
 import 'package:bkash_payment_flutter/route/route_name.dart';
 import 'package:flutter/material.dart';
@@ -25,22 +24,38 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   // Grant token
   Future<GrantTokenResponse> grantToken() async {
+    const username = String.fromEnvironment("username");
+    if(username.isEmpty){
+      throw AssertionError("Username is not set");
+    }
+    const password = String.fromEnvironment("password");
+    if(password.isEmpty){
+      throw AssertionError("Password is not set");
+    }
+    const appKey = String.fromEnvironment("app_key");
+    if(appKey.isEmpty){
+      throw AssertionError("App Key is not set");
+    }
+    const appSecret = String.fromEnvironment("app_secret");
+    if(appSecret.isEmpty){
+      throw AssertionError("App Secret is not set");
+    }
     final response = await http.post(
       Uri.parse(
           "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/token/grant"),
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "username": ApiKey.username,
-        "password": ApiKey.password,
+        "username": username,
+        "password": password,
       },
       body: Uint8List.fromList(
         utf8.encode(
           jsonEncode(
             {
-              "app_key": ApiKey.app_key,
+              "app_key": appKey,
               "app_secret":
-                  ApiKey.app_secret,
+                  appSecret,
             },
           ),
         ),
@@ -95,7 +110,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
 
     if (response.statusCode == 200) {
-      print("create payment: ${response.body}");
       return CreatePaymentResponse.fromJson(response.body);
     } else {
       Fluttertoast.showToast(msg: "Something went wrong");
