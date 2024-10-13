@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../models/create_payment_response.dart';
+import '../api/env.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({Key? key}) : super(key: key);
@@ -46,16 +47,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "username": username,
-        "password": password,
+        "username": Env.username,
+        "password": Env.password,
       },
       body: Uint8List.fromList(
         utf8.encode(
           jsonEncode(
             {
-              "app_key": appKey,
+              "app_key": Env.app_key,
               "app_secret":
-                  appSecret,
+                  Env.app_secret,
             },
           ),
         ),
